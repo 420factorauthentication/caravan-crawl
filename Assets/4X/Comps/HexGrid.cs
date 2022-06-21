@@ -1,4 +1,5 @@
 using UnityEngine;
+using NodeEngine;
 
 
 //Singleton that manages creating a map of hexagonal tiles //
@@ -20,11 +21,12 @@ public class HexGrid : MonoBehaviour {
         Test(); //TODO//
     }
 
-    public Node AddNode(int col, int row) {
+    public Node AddNode(int col, int row, NodeType type) {
         GameObject obj = new();
         obj.transform.SetParent(transform);
         Node node = obj.AddComponent<Node>();
         node.SetAxialPos(col, row);
+        node.SetType(type);
         return node;
     }
 
@@ -39,46 +41,46 @@ public class HexGrid : MonoBehaviour {
 
     //TODO//
     void Test() {
-        AddNode(-2, -2);
-        AddNode(-1, -2);
-        AddNode(0, -2);
-        AddNode(1, -2);
-        AddNode(2, -2);
+        AddNode(-2, -2, NodeType.Test);
+        AddNode(-1, -2, NodeType.Test);
+        AddNode( 0, -2, NodeType.Test);
+        AddNode( 1, -2, NodeType.Test);
+        AddNode( 2, -2, NodeType.Test);
 
-        AddNode(-2, -1);
-        AddNode(-1, -1);
-        AddNode(0, -1);
-        AddNode(1, -1);
-        AddNode(2, -1);
+        AddNode(-2, -1, NodeType.Test);
+        AddNode(-1, -1, NodeType.Test);
+        AddNode( 0, -1, NodeType.Test);
+        AddNode( 1, -1, NodeType.Test);
+        AddNode( 2, -1, NodeType.Test);
 
-        AddNode(-2, 0);
-        AddNode(-1, 0);
-        AddNode(0, 0);
-        AddNode(1, 0);
-        AddNode(2, 0);
+        AddNode(-2, 0, NodeType.Test);
+        AddNode(-1, 0, NodeType.Test);
+        AddNode( 0, 0, NodeType.Test);
+        AddNode( 1, 0, NodeType.Test);
+        AddNode( 2, 0, NodeType.Test);
 
-        AddNode(-2, 1);
-        AddNode(-1, 1);
-        AddNode(0, 1);
-        AddNode(1, 1);
-        AddNode(2, 1);
+        AddNode(-2, 1, NodeType.Test);
+        AddNode(-1, 1, NodeType.Test);
+        AddNode( 0, 1, NodeType.Test);
+        AddNode( 1, 1, NodeType.Test);
+        AddNode( 2, 1, NodeType.Test);
 
-        AddNode(-2, 2);
-        AddNode(-1, 2);
-        AddNode(0, 2);
-        AddNode(1, 2);
-        AddNode(2, 2);
+        AddNode(-2, 2, NodeType.Test);
+        AddNode(-1, 2, NodeType.Test);
+        AddNode( 0, 2, NodeType.Test);
+        AddNode( 1, 2, NodeType.Test);
+        AddNode( 2, 2, NodeType.Test);
 
-        AddNode(-2, 3);
-        AddNode(-1, 3);
-        AddNode(0, 3);
-        AddNode(1, 3);
-        AddNode(2, 3);
+        AddNode(-2, 3, NodeType.Test);
+        AddNode(-1, 3, NodeType.Test);
+        AddNode( 0, 3, NodeType.Test);
+        AddNode( 1, 3, NodeType.Test);
+        AddNode( 2, 3, NodeType.Test);
 
-        AddNode(-2, 4);
-        AddNode(-1, 4);
-        AddNode(0, 4);
-        AddNode(1, 4);
-        AddNode(2, 4);
+        AddNode(-2, 4, NodeType.Test);
+        AddNode(-1, 4, NodeType.Test);
+        AddNode( 0, 4, NodeType.Test);
+        AddNode( 1, 4, NodeType.Test);
+        AddNode( 2, 4, NodeType.Test);
     }
 }

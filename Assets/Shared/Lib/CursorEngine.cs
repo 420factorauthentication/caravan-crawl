@@ -1,20 +1,23 @@
-using System.IO;
 using UnityEngine;
 
 
 namespace CursorEngine {
 
-    // Singleton to change cursor textures //
+    public static class CursorManager {
+        public static void SetCursor(CursorTex cursorTex) {
+            Cursor.SetCursor(cursorTex.Tex, Vector2.zero, CursorMode.Auto);
+        }
+    }
+
     public class CursorTex {
-        public CursorTex() {
-            BuildTex = new Texture2D(64, 64);
-            BuildTex.LoadImage(File.ReadAllBytes(BuildPath));
+        public Texture2D Tex {get; private set;}
+        public CursorTex(string resourceName) {
+            if ((resourceName == null) || (resourceName == "")) return;
+            Tex = Resources.Load<Texture2D>(resourceName);
         }
 
-        public static CursorTex Manager = new();
-
-        public Texture2D BuildTex { get; private set; }
-
-        public const string BuildPath = "Assets/CCG/Art/cursor-build-32.png";
+        public static CursorTex
+            Default = new(null),
+            Build = new("cursor-build-32");
     }
 }

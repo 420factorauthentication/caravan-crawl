@@ -104,14 +104,14 @@ public class Hand : MonoBehaviour,
     //When cursor leaves deck area, change reticle if a card is magnetized
     public void OnPointerEnter(PointerEventData e) {
         if (!HandCard.IsAnyMagnetized) return;
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        CursorManager.SetCursor(CursorTex.Default);
         Cursor.visible = false;
         HandCard.CurrMagnetized.cg.alpha = 1f;
     }
 
     public void OnPointerExit(PointerEventData e) {
         if (!HandCard.IsAnyMagnetized) return;
-        Cursor.SetCursor(CursorTex.Manager.BuildTex, Vector2.zero, CursorMode.Auto);
+        CursorManager.SetCursor(CursorTex.Build);
         Cursor.visible = true;
         HandCard.CurrMagnetized.cg.alpha = 0f;
     }
