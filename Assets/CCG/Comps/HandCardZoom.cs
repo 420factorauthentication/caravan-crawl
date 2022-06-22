@@ -8,13 +8,15 @@ using CardEngine;
 [RequireComponent(typeof(RectTransform))]
 
 public class HandCardZoom : MonoBehaviour {
+    public static HandCardZoom Manager;
     RectTransform tr;
     Image img;
 
     void Awake() {
-        //Subscribe to events
-        HandCard.ZoomEvent += OnZoomEvent;
-        HandCard.UnzoomEvent += OnUnzoomEvent;
+        //Create singleton instance
+        if ((Manager != null) && (Manager != this))
+            GameObject.Destroy(Manager.gameObject);
+        Manager = this;
         //Init component handles
         tr = GetComponent<RectTransform>();
         img = GetComponent<Image>();
@@ -42,13 +44,13 @@ public class HandCardZoom : MonoBehaviour {
     }
 
     //When a HandCard is hovered, move, update, and unhide this zoomed image
-    void OnZoomEvent(int handSlot, CardStats stats) {
+    public void Zoom(int handSlot, CardStats stats) {
         SetUI(stats);
         tr.localPosition = HandCard.GetHandPos(handSlot);
         img.color = Color.white;
     }
 
-    void OnUnzoomEvent() {
+    public void Unzoom() {
         img.color = Color.clear;
     }
 }

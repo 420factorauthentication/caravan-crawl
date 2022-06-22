@@ -4,6 +4,7 @@ using NodeEngine;
 
 //Singleton that manages creating a map of hexagonal tiles //
 public class HexGrid : MonoBehaviour {
+    public static HexGrid Manager;
 
     // Set before adding nodes; doesn't update on change //
     // Offsets render at different world coords, //
@@ -14,6 +15,9 @@ public class HexGrid : MonoBehaviour {
     [HideInInspector] public float qOffR = 2f;  //Every qOffR rows, shift cols back 1
 
     void Awake() {
+        if ((Manager != null) && (Manager != this))
+            GameObject.Destroy(Manager.gameObject);
+        Manager = this;
         gameObject.name = "HexGrid";
     }
 

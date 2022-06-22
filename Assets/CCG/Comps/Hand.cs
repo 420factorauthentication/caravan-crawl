@@ -14,9 +14,12 @@ public class Hand : MonoBehaviour,
                     IPointerEnterHandler,
                     IPointerExitHandler {
 
-////////////////
-// Properties //
-////////////////
+    ////////////////
+    // Properties //
+    ////////////////
+
+    //Static singleton handle
+    public static Hand Manager;
 
     //Index == slot in hand
     static List<HandCard> _cards = new();
@@ -30,6 +33,11 @@ public class Hand : MonoBehaviour,
 ////////////////////
 
     void Awake() {
+        //Create singleton instance
+        if ((Manager != null) && (Manager != this))
+            GameObject.Destroy(Manager.gameObject);
+        Manager = this;
+        //Init component handles
         tr = GetComponent<RectTransform>();
         //Orient position to bottom left
         tr.anchorMin = Vector2.zero;

@@ -135,13 +135,6 @@ public class HandCard : CanvasDraggable,
     public static event MagnetEventHandler AnyHandCardDemagnet
         = delegate { IsAnyMagnetized = false; };
 
-    //On hover: show a zoomed image
-    public delegate void ZoomEventHandler(int handSlot, CardStats stats);
-    public static event ZoomEventHandler ZoomEvent;
-
-    public delegate void UnzoomEventHandler();
-    public static event UnzoomEventHandler UnzoomEvent;
-
 ////////////////////
 // Event Handlers //
 ////////////////////
@@ -159,10 +152,10 @@ public class HandCard : CanvasDraggable,
 //////////////////////////
 
     public void OnPointerEnter(PointerEventData e) {
-        ZoomEvent?.Invoke(handSlot, stats);
+        HandCardZoom.Manager.Zoom(handSlot, stats);
     }
 
     public void OnPointerExit(PointerEventData e) {
-        UnzoomEvent?.Invoke();
+        HandCardZoom.Manager.Unzoom();
     }
 }
