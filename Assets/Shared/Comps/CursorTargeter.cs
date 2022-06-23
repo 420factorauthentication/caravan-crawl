@@ -20,6 +20,7 @@ public class CursorTargeter : MonoBehaviour {
     }
 
     void Update() {
+        if (Camera.main == null) return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Physics.Raycast(ray, out hit);

@@ -22,16 +22,12 @@ public class Node : MonoBehaviour {
     }
 
     public void SetAxialPos(int newCol, int newRow) {
-        Col = newCol;
-        Row = newRow;
-        //Calculate world coord offsets
-        HexGrid parentGrid = transform.parent.GetComponent<HexGrid>();
-        float qOffR = parentGrid.qOffR;
-        float rOffQ = parentGrid.rOffQ;
-        int q = (qOffR==0)?Col:  Col - Mathf.FloorToInt(1f / qOffR * Row);
-        int r = (rOffQ==0)?Row:  Row - Mathf.FloorToInt(1f / rOffQ * Col);
-        SetWorldCoords(q, r, parentGrid.scale, parentGrid.rotDeg);
-        name = "Node " + Col + "q " + Row + "r";
+        int q = (HexGrid.Manager.qOffR==0) ? newCol:
+            newCol - Mathf.FloorToInt (1f / HexGrid.Manager.qOffR * newRow);
+        int r = (HexGrid.Manager.rOffQ==0) ? newRow:
+            newRow - Mathf.FloorToInt (1f / HexGrid.Manager.rOffQ * newCol);
+        SetWorldCoords(q, r, HexGrid.Manager.scale, HexGrid.Manager.rotDeg);
+        name = "Node " + newCol + "q " + newRow + "r";
     }
 
     void SetWorldCoords(int q, int r, float scale, float rotDeg) {

@@ -9,7 +9,7 @@ public class HexGrid : MonoBehaviour {
     // Set before adding nodes; doesn't update on change //
     // Offsets render at different world coords, //
     //  but row/column axial coords are the same //
-    [HideInInspector] public float scale = 1f;
+    [HideInInspector] public float scale = 10f;
     [HideInInspector] public float rotDeg = 0f;
     [HideInInspector] public float rOffQ = 0f;  //Every rOffQ cols, shift rows back 1
     [HideInInspector] public float qOffR = 2f;  //Every qOffR rows, shift cols back 1
@@ -31,6 +31,12 @@ public class HexGrid : MonoBehaviour {
         Node node = obj.AddComponent<Node>();
         node.SetAxialPos(col, row);
         node.SetType(type);
+        //Bandaid fix for weird glitch:
+        //A node at (0,0) isnt initially detected by raycasts
+        if ((col == 0) && (row == 0)) {
+            obj.SetActive(false);
+            obj.SetActive(true);
+        }
         return node;
     }
 
@@ -74,17 +80,5 @@ public class HexGrid : MonoBehaviour {
         AddNode( 0, 2, NodeType.Test);
         AddNode( 1, 2, NodeType.Test);
         AddNode( 2, 2, NodeType.Test);
-
-        AddNode(-2, 3, NodeType.Test);
-        AddNode(-1, 3, NodeType.Test);
-        AddNode( 0, 3, NodeType.Test);
-        AddNode( 1, 3, NodeType.Test);
-        AddNode( 2, 3, NodeType.Test);
-
-        AddNode(-2, 4, NodeType.Test);
-        AddNode(-1, 4, NodeType.Test);
-        AddNode( 0, 4, NodeType.Test);
-        AddNode( 1, 4, NodeType.Test);
-        AddNode( 2, 4, NodeType.Test);
     }
 }
