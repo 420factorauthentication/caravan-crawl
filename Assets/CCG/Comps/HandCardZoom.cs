@@ -39,18 +39,18 @@ public class HandCardZoom : MonoBehaviour {
     }
 
     //Update graphics and text
-    public void SetUI(CardStats stats) {
+    public static void SetUI(CardStats stats) {
         
     }
 
     //When a HandCard is hovered, move, update, and unhide this zoomed image
-    public void Zoom(int handSlot, CardStats stats) {
+    public static void Zoom(int handSlot, CardStats stats) {
         SetUI(stats);
-        tr.localPosition = HandCard.GetHandPos(handSlot);
-        img.color = Color.white;
+        Manager.tr.localPosition = HandCard.GetHandPos(handSlot);
+        Manager.img.color = Color.white;
     }
 
-    public void Unzoom() {
-        img.color = Color.clear;
+    public static void Unzoom() {
+        Manager.img.color = Color.clear;
     }
 }

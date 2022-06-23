@@ -152,10 +152,10 @@ public class HandCard : CanvasDraggable,
 //////////////////////////
 
     public void OnPointerEnter(PointerEventData e) {
-        HandCardZoom.Manager.Zoom(handSlot, stats);
+        HandCardZoom.Zoom(handSlot, stats);
     }
 
     public void OnPointerExit(PointerEventData e) {
-        HandCardZoom.Manager.Unzoom();
+        HandCardZoom.Unzoom();
     }
 }

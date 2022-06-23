@@ -22,11 +22,11 @@ public class Node : MonoBehaviour {
     }
 
     public void SetAxialPos(int newCol, int newRow) {
-        int q = (HexGrid.Manager.qOffR==0) ? newCol:
-            newCol - Mathf.FloorToInt (1f / HexGrid.Manager.qOffR * newRow);
-        int r = (HexGrid.Manager.rOffQ==0) ? newRow:
-            newRow - Mathf.FloorToInt (1f / HexGrid.Manager.rOffQ * newCol);
-        SetWorldCoords(q, r, HexGrid.Manager.scale, HexGrid.Manager.rotDeg);
+        int q = (HexGrid.qOffR==0) ? newCol:
+            newCol - Mathf.FloorToInt (1f / HexGrid.qOffR * newRow);
+        int r = (HexGrid.rOffQ==0) ? newRow:
+            newRow - Mathf.FloorToInt (1f / HexGrid.rOffQ * newCol);
+        SetWorldCoords(q, r, HexGrid.scale, HexGrid.rotDeg);
         name = "Node " + newCol + "q " + newRow + "r";
     }
 

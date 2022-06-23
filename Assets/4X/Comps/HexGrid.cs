@@ -9,10 +9,11 @@ public class HexGrid : MonoBehaviour {
     // Set before adding nodes; doesn't update on change //
     // Offsets render at different world coords, //
     //  but row/column axial coords are the same //
-    [HideInInspector] public float scale = 10f;
-    [HideInInspector] public float rotDeg = 0f;
-    [HideInInspector] public float rOffQ = 0f;  //Every rOffQ cols, shift rows back 1
-    [HideInInspector] public float qOffR = 2f;  //Every qOffR rows, shift cols back 1
+    [HideInInspector] public static float
+        scale  = 10f,
+        rotDeg = 0f,
+        rOffQ  = 0f,  //Every rOffQ cols, shift rows back 1
+        qOffR  = 2f;  //Every qOffR rows, shift cols back 1
 
     void Awake() {
         if ((Manager != null) && (Manager != this))
@@ -25,9 +26,9 @@ public class HexGrid : MonoBehaviour {
         Test(); //TODO//
     }
 
-    public Node AddNode(int col, int row, NodeType type) {
+    public static Node AddNode(int col, int row, NodeType type) {
         GameObject obj = new();
-        obj.transform.SetParent(transform);
+        obj.transform.SetParent(Manager.transform);
         Node node = obj.AddComponent<Node>();
         node.SetAxialPos(col, row);
         node.SetType(type);
@@ -40,12 +41,12 @@ public class HexGrid : MonoBehaviour {
         return node;
     }
 
-    public void RemoveNodeAt(int col, int row) {
+    public static void RemoveNodeAt(int col, int row) {
         GameObject nodeObj = GetNodeObjAt(col, row);
         if (nodeObj != null) Destroy(nodeObj);
     }
 
-    public GameObject GetNodeObjAt(int col, int row) {
+    public static GameObject GetNodeObjAt(int col, int row) {
         return GameObject.Find("HexGrid/Node " + col + "q " + row + "r");
     }
 

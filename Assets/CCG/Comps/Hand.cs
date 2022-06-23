@@ -14,9 +14,9 @@ public class Hand : MonoBehaviour,
                     IPointerEnterHandler,
                     IPointerExitHandler {
 
-    ////////////////
-    // Properties //
-    ////////////////
+////////////////
+// Properties //
+////////////////
 
     //Static singleton handle
     public static Hand Manager {get; private set;}
