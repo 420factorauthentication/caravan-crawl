@@ -19,7 +19,7 @@ public class Hand : MonoBehaviour,
     ////////////////
 
     //Static singleton handle
-    public static Hand Manager;
+    public static Hand Manager {get; private set;}
 
     //Index == slot in hand
     static List<HandCard> _cards = new();

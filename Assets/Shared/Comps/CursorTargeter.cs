@@ -1,9 +1,17 @@
 using UnityEngine;
+using EventEngine;
 
 
 //Singleton that manages cursor hover interactions//
 public class CursorTargeter : MonoBehaviour {
-    public static CursorTargeter Manager;
+    public static CursorTargeter Manager {get; private set;}
+    public static RaycastHit OldObjHit {get; private set;}
+    public static RaycastHit NewObjHit {get; private set;}
+    public static event GenericEventHandler NewObjHover;
+
+    void Start() {
+        NewObjHover += Node.OnNewObjMouseHover;
+    }
 
     void Awake() {
         if ((Manager != null) && (Manager != this))
@@ -14,9 +22,11 @@ public class CursorTargeter : MonoBehaviour {
     void Update() {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit)) {
-            Debug.Log(hit.transform.name);
-            Debug.Log("hit");
-        }
+        Physics.Raycast(ray, out hit);
+        if (hit.collider == NewObjHit.collider) return;
+        //Note: collider can be null, which means mouse is hovering no obj
+        OldObjHit = NewObjHit;
+        NewObjHit = hit;
+        NewObjHover?.Invoke();
     }
 }

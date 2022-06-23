@@ -9,14 +9,16 @@ public class Node : MonoBehaviour {
     public int Col {get; private set;}
     public int Row {get; private set;}
     public NodeType Type {get; private set;}
+    MeshRenderer rend;
 
     void Awake() {
+        rend = GetComponent<MeshRenderer>();
         gameObject.AddComponent<NodeMesh>();
     }
 
     public void SetType(NodeType nodeType) {
         Type = nodeType;
-        GetComponent<MeshRenderer>().material = nodeType.Mat;
+        rend.material = nodeType.Mat;
     }
 
     public void SetAxialPos(int newCol, int newRow) {
@@ -40,5 +42,15 @@ public class Node : MonoBehaviour {
         // set world pos //
         AxHexVec2 coords = new(q, r, geo);
         transform.localPosition = coords.ToWorld();
+    }
+
+    //Change shader on mouse hover
+    public static void OnNewObjMouseHover() {
+        Node oldNode = CursorTargeter.OldObjHit.transform?.GetComponent<Node>();
+        Node newNode = CursorTargeter.NewObjHit.transform?.GetComponent<Node>();
+        if (oldNode != null)
+            oldNode.rend.material.shader = NodeShader.Base;
+        if (newNode != null)
+            newNode.rend.material.shader = NodeShader.Hover;
     }
 }

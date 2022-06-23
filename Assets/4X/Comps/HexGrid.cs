@@ -4,7 +4,7 @@ using NodeEngine;
 
 //Singleton that manages creating a map of hexagonal tiles //
 public class HexGrid : MonoBehaviour {
-    public static HexGrid Manager;
+    public static HexGrid Manager {get; private set;}
 
     // Set before adding nodes; doesn't update on change //
     // Offsets render at different world coords, //

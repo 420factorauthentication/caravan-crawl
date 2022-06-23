@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using CardEngine;
 using GuiEngine;
+using EventEngine;
 
 
 [RequireComponent(typeof(RectTransform))]
@@ -129,10 +130,9 @@ public class HandCard : CanvasDraggable,
     public static bool IsAnyMagnetized = false;
     public static HandCard CurrMagnetized;
 
-    public delegate void MagnetEventHandler();
-    public static event MagnetEventHandler AnyHandCardMagnet
+    public static event GenericEventHandler AnyHandCardMagnet
         = delegate { IsAnyMagnetized = true; };
-    public static event MagnetEventHandler AnyHandCardDemagnet
+    public static event GenericEventHandler AnyHandCardDemagnet
         = delegate { IsAnyMagnetized = false; };
 
 ////////////////////

@@ -8,7 +8,7 @@ using CardEngine;
 [RequireComponent(typeof(RectTransform))]
 
 public class HandCardZoom : MonoBehaviour {
-    public static HandCardZoom Manager;
+    public static HandCardZoom Manager {get; private set;}
     RectTransform tr;
     Image img;
 
