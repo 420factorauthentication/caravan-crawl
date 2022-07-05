@@ -5,11 +5,9 @@ using HexEngine;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshCollider))]
 
-public class NodeMesh : MonoBehaviour {
-    Mesh mesh;
-    
+public class NodeMesh : MonoBehaviour {    
     void Awake() {
-        mesh = new Mesh();
+        Mesh mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
@@ -28,6 +26,7 @@ public class NodeMesh : MonoBehaviour {
             new(0.5f, 1.00f),
             new(1.0f, 0.75f),
         };
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
         mesh.Clear();
         mesh.vertices = hexGeo.GetVerts();
         mesh.triangles = triangles;

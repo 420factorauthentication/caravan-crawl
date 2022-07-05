@@ -22,18 +22,24 @@ public class Node : MonoBehaviour {
     }
 
     public void SetAxialPos(int newCol, int newRow) {
-        int q = (HexGrid.qOffR==0) ? newCol:
-            newCol - Mathf.FloorToInt (1f / HexGrid.qOffR * newRow);
-        int r = (HexGrid.rOffQ==0) ? newRow:
-            newRow - Mathf.FloorToInt (1f / HexGrid.rOffQ * newCol);
-        SetWorldCoords(q, r, HexGrid.scale, HexGrid.rotDeg);
+        AxHexVec2 offPos = GetOffsetAxialPos(newCol, newRow);
+        SetWorldCoords(offPos.Q, offPos.R);
         name = "Node " + newCol + "q " + newRow + "r";
     }
 
-    void SetWorldCoords(int q, int r, float scale, float rotDeg) {
+    public static AxHexVec2 GetOffsetAxialPos(int col, int row) {
+        int q = (HexGrid.qOffR == 0) ? col :
+            col - Mathf.FloorToInt(1f / HexGrid.qOffR * row);
+        int r = (HexGrid.rOffQ == 0) ? row :
+            row - Mathf.FloorToInt(1f / HexGrid.rOffQ * col);
+        HexGeo geo = new(HexGrid.scale, HexGrid.rotDeg);
+        return new AxHexVec2(q, r, geo);
+    }
+
+    void SetWorldCoords(float q, float r) {
         // set mesh //
         NodeMesh nodeMesh = GetComponent<NodeMesh>();
-        HexGeo geo = new(scale, rotDeg);
+        HexGeo geo = new(HexGrid.scale, HexGrid.rotDeg);
         nodeMesh.SetMesh(geo);
         // set world pos //
         AxHexVec2 coords = new(q, r, geo);
