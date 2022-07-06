@@ -1,5 +1,6 @@
 using UnityEngine;
 using HexEngine;
+using NodeEngine;
 
 
 namespace UnitEngine {
@@ -10,10 +11,16 @@ namespace UnitEngine {
     public class Entity : MonoBehaviour {
         public int NodeCol {get; private set;}
         public int NodeRow {get; private set;}
+        MeshRenderer rend;
+
+        protected virtual void Awake() {
+            rend = GetComponent<MeshRenderer>();
+        }
 
         public void SetModel(string resourceName) {
             Mesh mesh = Resources.Load<Mesh>(resourceName);
             GetComponent<MeshFilter>().mesh = mesh;
+            rend.material = Resources.Load<Material>(resourceName);  //TODO//
         }
 
         //Does nothing if Node GameObject doesnt exist
@@ -29,6 +36,15 @@ namespace UnitEngine {
 
         public GameObject GetNode() {
             return transform.parent.gameObject;
+        }
+
+        //Change shader on mouse hover
+        public void OnNodeHover() {
+            rend.material.shader = NodeShader.Hover;
+        }
+
+        public void OnNodeUnhover() {
+            rend.material.shader = NodeShader.Base;
         }
     }
 }

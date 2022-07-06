@@ -3,7 +3,8 @@ using UnitEngine;
 
 
 public class Building : Entity {
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         Test(); //TODO//
     }
 

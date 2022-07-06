@@ -1,6 +1,7 @@
 using UnityEngine;
 using HexEngine;
 using NodeEngine;
+using UnitEngine;
 
 
 //Note: GameObject children are all units/buildings on that node
@@ -60,10 +61,15 @@ public class Node : MonoBehaviour {
     public static void OnNewObjMouseHover() {
         Node oldNode = CursorTargeter.OldObjHit.transform?.GetComponent<Node>();
         Node newNode = CursorTargeter.NewObjHit.transform?.GetComponent<Node>();
-        if (oldNode != null)
+        if (oldNode != null) {
             oldNode.rend.material.shader = NodeShader.Base;
-        if (newNode != null)
+            foreach (Entity e in oldNode.gameObject.GetComponentsInChildren<Entity>())
+                e.OnNodeUnhover();
+        } if (newNode != null) {
             newNode.rend.material.shader = NodeShader.Hover;
+            foreach (Entity e in newNode.gameObject.GetComponentsInChildren<Entity>())
+                e.OnNodeHover();
+        }
     }
 
 
