@@ -34,6 +34,7 @@ public class HexGrid : MonoBehaviour {
         node.SetType(type);
         //Bandaid fix for weird glitch:
         //A node at (0,0) isnt initially detected by raycasts
+        //TODO: Breaks coroutines; look into better fix if coroutine is needed
         if ((col == 0) && (row == 0)) {
             obj.SetActive(false);
             obj.SetActive(true);

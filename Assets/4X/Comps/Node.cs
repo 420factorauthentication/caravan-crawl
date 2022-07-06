@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using HexEngine;
 using NodeEngine;
@@ -20,10 +21,23 @@ public class Node : MonoBehaviour {
     }
 
     public GameObject AddEntity<T>() {
+        GameObject obj = CreateEntity<T>();
+        ArrangeEntities();
+        return obj;
+    }
+
+    public GameObject[] AddEntities<T>(int count) {
+        GameObject[] entities = new GameObject[count];
+        for (int i = 0; i < count; i++)
+            entities[i] = CreateEntity<T>();
+        ArrangeEntities();
+        return entities;
+    }
+
+    GameObject CreateEntity<T>() {
         GameObject obj = new();
         obj.AddComponent(typeof(T));
         obj.transform.SetParent(transform);
-        obj.transform.localPosition = Vector3.zero;
         return obj;
     }
 
@@ -57,6 +71,26 @@ public class Node : MonoBehaviour {
         transform.localPosition = coords.ToWorld();
     }
 
+    //Arrange all children entities to be somewhat centered and equally spaced
+    void ArrangeEntities() {
+        HexGeo geo = new(HexGrid.scale, HexGrid.rotDeg);
+        int entities = transform.childCount;
+        int ePerRow = 1;
+        while ((ePerRow*ePerRow) < entities) ePerRow++;
+        int eRows = Mathf.CeilToInt((float) entities / ePerRow);
+        int eCols = ePerRow;
+        int eRowPaddings = eCols + 1;
+        int eColPaddings = eRows + 1;
+        for (int i = 0; i < entities; i++) {
+            int eCol = (i % ePerRow) + 1;
+            int eRow = (i / ePerRow) + 1;
+            float localQ = ((float) eCol / eRowPaddings) - 0.5f;
+            float localR = ((float) eRow / eColPaddings) - 0.5f;
+            AxHexVec2 coords = new(localQ, localR, geo);
+            transform.GetChild(i).localPosition = coords.ToWorld();
+        }
+    }
+
     //Change shader on mouse hover
     public static void OnNewObjMouseHover() {
         Node oldNode = CursorTargeter.OldObjHit.transform?.GetComponent<Node>();
@@ -75,6 +109,13 @@ public class Node : MonoBehaviour {
 
     //TODO//
     void Test() {
-        AddEntity<Building>();
+        StartCoroutine(TestCoroutine());
+    }
+
+    IEnumerator TestCoroutine() {
+        for (int i = 0; i < 16; i++) {
+            AddEntity<Building>();
+            yield return new WaitForSeconds(1f);
+        }
     }
 }
