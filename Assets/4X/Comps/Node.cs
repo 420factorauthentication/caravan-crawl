@@ -3,6 +3,7 @@ using HexEngine;
 using NodeEngine;
 
 
+//Note: GameObject children are all units/buildings on that node
 [RequireComponent(typeof(MeshRenderer))]
 
 public class Node : MonoBehaviour {
@@ -14,6 +15,15 @@ public class Node : MonoBehaviour {
     void Awake() {
         rend = GetComponent<MeshRenderer>();
         gameObject.AddComponent<NodeMesh>();
+        Test(); //TODO//
+    }
+
+    public GameObject AddEntity<T>() {
+        GameObject obj = new();
+        obj.AddComponent(typeof(T));
+        obj.transform.SetParent(transform);
+        obj.transform.localPosition = Vector3.zero;
+        return obj;
     }
 
     public void SetType(NodeType nodeType) {
@@ -54,5 +64,11 @@ public class Node : MonoBehaviour {
             oldNode.rend.material.shader = NodeShader.Base;
         if (newNode != null)
             newNode.rend.material.shader = NodeShader.Hover;
+    }
+
+
+    //TODO//
+    void Test() {
+        AddEntity<Building>();
     }
 }

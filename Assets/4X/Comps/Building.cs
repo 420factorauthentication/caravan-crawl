@@ -7,7 +7,6 @@ public class Building : Entity {
         Test(); //TODO//
     }
 
-
     //TODO//
     void Test() {
         SetModel("building/mesh/hutU3");
