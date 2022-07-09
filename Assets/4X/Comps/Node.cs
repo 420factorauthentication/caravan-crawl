@@ -3,6 +3,7 @@ using UnityEngine;
 using HexEngine;
 using NodeEngine;
 using UnitEngine;
+using GroupEngine;
 
 
 // ===================================================================== //
@@ -12,7 +13,7 @@ using UnitEngine;
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(NodeMesh))]
 
-public class Node : MonoBehaviour {
+public class Node : GroupHex {
 
 ////////////////
 // Properties //
@@ -37,27 +38,41 @@ public class Node : MonoBehaviour {
 // Methods //
 /////////////
 
+    // Remove a unit/building from this node hex //
+    public void RemoveEntity(int index) {
+        RemoveChild(index);
+    }
+
+    public void RemoveEntity(Component comp) {
+        RemoveChild(comp);
+    }
+
+    public void RemoveEntity(GameObject obj) {
+        RemoveChild(obj);
+    }
+
     // Add a unit/building to this node hex //
     public GameObject AddEntity<T>() {
-        GameObject obj = CreateEntity<T>();
-        ArrangeEntities();
+        GameObject obj = AddChild();
+        obj.AddComponent(typeof(T));
         return obj;
     }
 
     // Add x amount of a unit/building to this hex //
     public GameObject[] AddEntities<T>(int count) {
-        GameObject[] entities = new GameObject[count];
+        GameObject[] objs = AddChildren(count);
         for (int i = 0; i < count; i++)
-            entities[i] = CreateEntity<T>();
-        ArrangeEntities();
-        return entities;
+            objs[i].AddComponent(typeof(T));
+        return objs;
     }
 
+    // Set Node terrain type and update game to show it //
     public void SetType(NodeType nodeType) {
         Type = nodeType;
         rend.material = nodeType.Mat;
     }
 
+    // Set position on hexagonal game grid //
     public void SetAxialPos(int newCol, int newRow) {
         AxHexVec2 offPos = HexGrid.GetOffsetAxialPos(newCol, newRow);
         SetAbsWorldCoords(offPos.Q, offPos.R);
@@ -73,34 +88,6 @@ public class Node : MonoBehaviour {
         // set world pos //
         AxHexVec2 coords = new(absQ, absR, geo);
         transform.localPosition = coords.ToWorld();
-    }
-
-    // -- In public funcs, create entities, then run iterative init funcs -- //
-    GameObject CreateEntity<T>() {
-        GameObject obj = new();
-        obj.AddComponent(typeof(T));
-        obj.transform.SetParent(transform);
-        return obj;
-    }
-
-    // -- Iterative init func:  Arrange entities in a parallelogram -- //
-    void ArrangeEntities() {
-        HexGeo geo = new(HexGrid.scale, HexGrid.rotDeg);
-        int entities = transform.childCount;
-        int ePerRow = 1;
-        while ((ePerRow*ePerRow) < entities) ePerRow++;
-        int eRows = Mathf.CeilToInt((float) entities / ePerRow);
-        int eCols = ePerRow;
-        int eRowPaddings = eCols + 1;
-        int eColPaddings = eRows + 1;
-        for (int i = 0; i < entities; i++) {
-            int eCol = (i % ePerRow) + 1;
-            int eRow = (i / ePerRow) + 1;
-            float localQ = ((float) eCol / eRowPaddings) - 0.5f;
-            float localR = ((float) eRow / eColPaddings) - 0.5f;
-            AxHexVec2 coords = new(localQ, localR, geo);
-            transform.GetChild(i).localPosition = coords.ToWorld();
-        }
     }
 
     // -- TODO -- //
