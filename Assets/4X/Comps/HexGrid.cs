@@ -1,19 +1,28 @@
 using UnityEngine;
 using NodeEngine;
+using HexEngine;
 
 
-//Singleton that manages creating a map of hexagonal tiles //
+// ================================================================ //
+// Singleton that manages creating the game grid of hexagonal tiles //
+// ================================================================ //
 public class HexGrid : MonoBehaviour {
     public static HexGrid Manager {get; private set;}
 
-    // Set before adding nodes; doesn't update on change //
-    // Offsets render at different world coords, //
-    //  but row/column axial coords are the same //
+////////////////
+// Properties //
+////////////////
+
+    // -- TODO: update existing nodes on change -- //
     [HideInInspector] public static float
         scale  = 10f,
         rotDeg = 0f,
-        rOffQ  = 0f,  //Every rOffQ cols, shift rows back 1
-        qOffR  = 2f;  //Every qOffR rows, shift cols back 1
+        rOffQ  = 0f,  //Every rOffQ cols, shift world coords back 1 hex
+        qOffR  = 2f;  //Every qOffR rows, shift world coords back 1 hex
+
+////////////////////
+// Unity Messages //
+////////////////////
 
     void Awake() {
         if ((Manager != null) && (Manager != this))
@@ -25,6 +34,10 @@ public class HexGrid : MonoBehaviour {
     void Start() {
         Test(); //TODO//
     }
+
+/////////////
+// Methods //
+/////////////
 
     public static Node AddNode(int col, int row, NodeType type) {
         GameObject obj = new();
@@ -42,7 +55,7 @@ public class HexGrid : MonoBehaviour {
         return node;
     }
 
-    public static void RemoveNodeAt(int col, int row) {
+    public static void RemoveNode(int col, int row) {
         GameObject nodeObj = GetNodeObjAt(col, row);
         if (nodeObj != null) Destroy(nodeObj);
     }
@@ -51,7 +64,17 @@ public class HexGrid : MonoBehaviour {
         return GameObject.Find("HexGrid/Node " + col + "q " + row + "r");
     }
 
-    //TODO//
+    // Calculate hidden q and r (what they would be with offsets) //
+    public static AxHexVec2 GetOffsetAxialPos(int col, int row) {
+        int q = (HexGrid.qOffR == 0) ? col :
+            col - Mathf.FloorToInt(1f / HexGrid.qOffR * row);
+        int r = (HexGrid.rOffQ == 0) ? row :
+            row - Mathf.FloorToInt(1f / HexGrid.rOffQ * col);
+        HexGeo geo = new(HexGrid.scale, HexGrid.rotDeg);
+        return new AxHexVec2(q, r, geo);
+    }
+
+    // TODO //
     void Test() {
         AddNode(-2, -2, NodeType.Test);
         AddNode(-1, -2, NodeType.Test);

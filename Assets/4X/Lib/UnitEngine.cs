@@ -1,50 +1,73 @@
 using UnityEngine;
 using HexEngine;
 using NodeEngine;
+namespace UnitEngine /*;*/ {
 
 
-namespace UnitEngine {
+// =============== //
+// A unit/building //
+// =============== //
+[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter))]
 
-    [RequireComponent(typeof(MeshRenderer))]
-    [RequireComponent(typeof(MeshFilter))]
+public abstract class Entity : MonoBehaviour {
 
-    public class Entity : MonoBehaviour {
-        public int NodeCol {get; private set;}
-        public int NodeRow {get; private set;}
-        MeshRenderer rend;
+////////////////
+// Properties //
+////////////////
 
-        protected virtual void Awake() {
-            rend = GetComponent<MeshRenderer>();
-        }
+    public int NodeCol {get; private set;}
+    public int NodeRow {get; private set;}
+    MeshRenderer rend;
 
-        public void SetModel(string resourceName) {
-            Mesh mesh = Resources.Load<Mesh>(resourceName);
-            GetComponent<MeshFilter>().mesh = mesh;
-            rend.material = Resources.Load<Material>(resourceName);  //TODO//
-        }
+////////////////////
+// Unity Messages //
+////////////////////
 
-        //Does nothing if Node GameObject doesnt exist
-        public void SetNode(int newCol, int newRow) {
-            GameObject nodeObj = HexGrid.GetNodeObjAt(newCol, newRow);
-            if (nodeObj == null) return;
-            AxHexVec2 pos = Node.GetOffsetAxialPos(newCol, newRow);
-            transform.position = pos.ToWorld();
-            transform.SetParent(nodeObj.transform);
-            NodeCol = newCol;
-            NodeRow = newRow;
-        }
+    protected virtual void Awake() {
+        rend = GetComponent<MeshRenderer>();
+    }
 
-        public GameObject GetNode() {
-            return transform.parent.gameObject;
-        }
+/////////////
+// Methods //
+/////////////
 
-        //Change shader on mouse hover
-        public void OnNodeHover() {
-            rend.material.shader = NodeShader.Hover;
-        }
+    // Apply mesh and material from a 3D model file in Resources folder //
+    public void SetModel(string resourceName) {
+        Mesh mesh = Resources.Load<Mesh>(resourceName);
+        GetComponent<MeshFilter>().mesh = mesh;
+        rend.material = Resources.Load<Material>(resourceName);  //TODO//
+    }
 
-        public void OnNodeUnhover() {
-            rend.material.shader = NodeShader.Base;
-        }
+    // -- Does nothing if Node GameObject doesnt exist -- //
+    public void SetNode(int newCol, int newRow) {
+        GameObject nodeObj = HexGrid.GetNodeObjAt(newCol, newRow);
+        if (nodeObj == null) return;
+        AxHexVec2 pos = HexGrid.GetOffsetAxialPos(newCol, newRow);
+        transform.position = pos.ToWorld();
+        transform.SetParent(nodeObj.transform);
+        NodeCol = newCol;
+        NodeRow = newRow;
+    }
+
+    public GameObject GetNode() {
+        return transform.parent.gameObject;
+    }
+
+///////////////////////
+// Event Subhandlers //
+///////////////////////
+
+    // -- Called by parent Node on mouse hover -- //
+    public void OnNodeHover() {
+        rend.material.shader = NodeShader.Hover;
+    }
+
+    // -- Called by parent Node on mouse unhover -- //
+    public void OnNodeUnhover() {
+        rend.material.shader = NodeShader.Base;
     }
 }
+
+
+/***************************************************************************/ }

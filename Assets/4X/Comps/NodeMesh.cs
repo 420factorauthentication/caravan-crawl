@@ -2,16 +2,29 @@ using UnityEngine;
 using HexEngine;
 
 
+// =================================================================== //
+// When Node position is set, recalculates vertices and recreates mesh //
+// =================================================================== //
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshCollider))]
 
-public class NodeMesh : MonoBehaviour {    
+public class NodeMesh : MonoBehaviour {
+
+////////////////////
+// Unity Messages //
+////////////////////
+
     void Awake() {
         Mesh mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 
+/////////////
+// Methods //
+/////////////
+
+    // Create a new mesh, with vertices calculated from a HexGeo //
     public void SetMesh(HexGeo hexGeo) {
         int[] triangles = new[] {
             0, 1, 6,    0, 6, 5,    0, 5, 4,
