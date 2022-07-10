@@ -18,25 +18,17 @@ public interface IHoverChild {
 // ========================================================== //
 public abstract class HoverParent : MonoBehaviour {
 
-////////////////////
-// Unity Messages //
-////////////////////
-
-    protected virtual void Awake() {
-        CursorTargeter.NewObjHover += OnNewObjHover;
-    }
-
 /////////////
 // Methods //
 /////////////
 
     // The things to do to this HoverParent only (not children) //
-    protected abstract void HoverEffectsSelf();
+    protected abstract void OnHover();
 
     // The things to do to this HoverParent only (not children) //
-    protected abstract void UnhoverEffectsSelf();
+    protected abstract void OnUnhover();
 
-    // -- Event delegate that handles both HoverParent and HoverChilds -- //
+    // -- Called by CursorTargeter when any new object is hovered -- //
     public static void OnNewObjHover() {
         HoverParent oldParent =
             CursorTargeter.OldObjHit.transform?.GetComponent<HoverParent>();
@@ -44,15 +36,16 @@ public abstract class HoverParent : MonoBehaviour {
             CursorTargeter.NewObjHit.transform?.GetComponent<HoverParent>();
 
         if (oldParent != null) {
-            oldParent.UnhoverEffectsSelf();
+            oldParent.OnUnhover();
             foreach (IHoverChild child in
                 oldParent.gameObject.GetComponentsInChildren<IHoverChild>())
                     child.OnParentUnhover();
 
         } if (newParent != null) {
-            newParent.HoverEffectsSelf();
-            foreach (IHoverChild child in newParent.gameObject.GetComponentsInChildren<IHoverChild>())
-                child.OnParentHover();
+            newParent.OnHover();
+            foreach (IHoverChild child in
+                newParent.gameObject.GetComponentsInChildren<IHoverChild>())
+                    child.OnParentHover();
         }
     }
 }

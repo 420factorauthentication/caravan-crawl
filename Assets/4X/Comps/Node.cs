@@ -10,8 +10,9 @@ using UnitEngine;
 // -- GameObj children = List of stationed units/buildings (entities) -- //
 // ===================================================================== //
 [RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(NodeMesh))]
 [RequireComponent(typeof(GroupHex))]
+[RequireComponent(typeof(NodeHover))]
+[RequireComponent(typeof(NodeMesh))]
 
 public class Node : MonoBehaviour {
 
@@ -22,7 +23,6 @@ public class Node : MonoBehaviour {
     public int Col {get; private set;}
     public int Row {get; private set;}
     public NodeType Type {get; private set;}
-    MeshRenderer rend;
     GroupHex groupHex;
 
 ////////////////////
@@ -30,7 +30,6 @@ public class Node : MonoBehaviour {
 ////////////////////
 
     void Awake() {
-        rend = GetComponent<MeshRenderer>();
         groupHex = GetComponent<GroupHex>();
         Test(); //TODO//
     }
@@ -70,7 +69,7 @@ public class Node : MonoBehaviour {
     // Set Node terrain type and update game to show it //
     public void SetType(NodeType nodeType) {
         Type = nodeType;
-        rend.material = nodeType.Mat;
+        GetComponent<MeshRenderer>().material = nodeType.Mat;
     }
 
     // Set position on hexagonal game grid //
@@ -101,25 +100,6 @@ public class Node : MonoBehaviour {
         for (int i = 0; i < 16; i++) {
             AddEntity<Building>();
             yield return new WaitForSeconds(1f);
-        }
-    }
-
-////////////////////
-// Event Handlers //
-////////////////////
-
-    // Change shader on mouse hover //
-    public static void OnNewObjMouseHover() {
-        Node oldNode = CursorTargeter.OldObjHit.transform?.GetComponent<Node>();
-        Node newNode = CursorTargeter.NewObjHit.transform?.GetComponent<Node>();
-        if (oldNode != null) {
-            oldNode.rend.material.shader = NodeShader.Base;
-            foreach (Entity e in oldNode.gameObject.GetComponentsInChildren<Entity>())
-                e.OnNodeUnhover();
-        } if (newNode != null) {
-            newNode.rend.material.shader = NodeShader.Hover;
-            foreach (Entity e in newNode.gameObject.GetComponentsInChildren<Entity>())
-                e.OnNodeHover();
         }
     }
 }

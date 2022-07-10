@@ -1,5 +1,6 @@
 using UnityEngine;
 using EventEngine;
+using HoverEngine;
 
 
 // ================================================ //
@@ -10,6 +11,10 @@ public class CursorTargeter : MonoBehaviour {
     public static RaycastHit OldObjHit {get; private set;}
     public static RaycastHit NewObjHit {get; private set;}
     public static event GenericEventHandler NewObjHover;
+
+    void Start() {
+        NewObjHover += HoverParent.OnNewObjHover;
+    }
 
     void Awake() {
         if ((Manager != null) && (Manager != this))
