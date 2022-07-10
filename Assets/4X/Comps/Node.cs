@@ -3,7 +3,6 @@ using UnityEngine;
 using HexEngine;
 using NodeEngine;
 using UnitEngine;
-using GroupEngine;
 
 
 // ===================================================================== //
@@ -12,8 +11,9 @@ using GroupEngine;
 // ===================================================================== //
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(NodeMesh))]
+[RequireComponent(typeof(GroupHex))]
 
-public class Node : GroupHex {
+public class Node : MonoBehaviour {
 
 ////////////////
 // Properties //
@@ -23,6 +23,7 @@ public class Node : GroupHex {
     public int Row {get; private set;}
     public NodeType Type {get; private set;}
     MeshRenderer rend;
+    GroupHex groupHex;
 
 ////////////////////
 // Unity Messages //
@@ -30,7 +31,7 @@ public class Node : GroupHex {
 
     void Awake() {
         rend = GetComponent<MeshRenderer>();
-        gameObject.AddComponent<NodeMesh>();
+        groupHex = GetComponent<GroupHex>();
         Test(); //TODO//
     }
 
@@ -40,27 +41,27 @@ public class Node : GroupHex {
 
     // Remove a unit/building from this node hex //
     public void RemoveEntity(int index) {
-        RemoveChild(index);
+        groupHex.RemoveChild(index);
     }
 
     public void RemoveEntity(Component comp) {
-        RemoveChild(comp);
+        groupHex.RemoveChild(comp);
     }
 
     public void RemoveEntity(GameObject obj) {
-        RemoveChild(obj);
+        groupHex.RemoveChild(obj);
     }
 
     // Add a unit/building to this node hex //
     public GameObject AddEntity<T>() {
-        GameObject obj = AddChild();
+        GameObject obj = groupHex.AddChild();
         obj.AddComponent(typeof(T));
         return obj;
     }
 
     // Add x amount of a unit/building to this hex //
     public GameObject[] AddEntities<T>(int count) {
-        GameObject[] objs = AddChildren(count);
+        GameObject[] objs = groupHex.AddChildren(count);
         for (int i = 0; i < count; i++)
             objs[i].AddComponent(typeof(T));
         return objs;

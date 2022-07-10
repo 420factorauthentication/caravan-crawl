@@ -2,16 +2,14 @@ using UnityEngine;
 using EventEngine;
 
 
-//Singleton that manages cursor hover interactions//
+// ================================================ //
+// Singleton that manages cursor hover interactions //
+// ================================================ //
 public class CursorTargeter : MonoBehaviour {
     public static CursorTargeter Manager {get; private set;}
     public static RaycastHit OldObjHit {get; private set;}
     public static RaycastHit NewObjHit {get; private set;}
     public static event GenericEventHandler NewObjHover;
-
-    void Start() {
-        NewObjHover += Node.OnNewObjMouseHover;
-    }
 
     void Awake() {
         if ((Manager != null) && (Manager != this))
