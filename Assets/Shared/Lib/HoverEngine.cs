@@ -18,9 +18,9 @@ public interface IHoverChild {
 // ========================================================== //
 public abstract class HoverParent : MonoBehaviour {
 
-/////////////
-// Methods //
-/////////////
+////////////////////
+// Event Handlers //
+////////////////////
 
     // The things to do to this HoverParent only (not children) //
     protected abstract void OnHover();

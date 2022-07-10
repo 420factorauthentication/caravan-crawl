@@ -1,6 +1,7 @@
 using UnityEngine;
 using HexEngine;
 using NodeEngine;
+using HoverEngine;
 namespace UnitEngine /*;*/ {
 
 
@@ -10,7 +11,7 @@ namespace UnitEngine /*;*/ {
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
 
-public abstract class Entity : MonoBehaviour {
+public abstract class Entity : MonoBehaviour, IHoverChild {
 
 ////////////////
 // Properties //
@@ -54,17 +55,17 @@ public abstract class Entity : MonoBehaviour {
         return transform.parent.gameObject;
     }
 
-///////////////////////
-// Event Subhandlers //
-///////////////////////
+////////////////////
+// Event Handlers //
+////////////////////
 
-    // -- Called by parent Node on mouse hover -- //
-    public void OnNodeHover() {
+    // Changes shader when parent Node is hovered //
+    public void OnParentHover() {
         rend.material.shader = NodeShader.Hover;
     }
 
-    // -- Called by parent Node on mouse unhover -- //
-    public void OnNodeUnhover() {
+    // Changes shader when parent Node is unhovered //
+    public void OnParentUnhover() {
         rend.material.shader = NodeShader.Base;
     }
 }
