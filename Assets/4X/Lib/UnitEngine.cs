@@ -5,9 +5,9 @@ using HoverEngine;
 namespace UnitEngine /*;*/ {
 
 
-// =============== //
-// A unit/building //
-// =============== //
+// ============================================================= //
+// A unit or building on a Node. Created by cards, effects, etc. //
+// ============================================================= //
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
 
@@ -33,7 +33,7 @@ public abstract class Entity : MonoBehaviour, IHoverChild {
 // Methods //
 /////////////
 
-    // Apply mesh and material from a 3D model file in Resources folder //
+    // Applies mesh and material from a 3D model file in Resources folder //
     public void SetModel(string resourceName) {
         Mesh mesh = Resources.Load<Mesh>(resourceName);
         GetComponent<MeshFilter>().mesh = mesh;

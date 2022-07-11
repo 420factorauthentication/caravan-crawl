@@ -2,9 +2,9 @@ using UnityEngine;
 namespace HexEngine /*;*/ {
 
 
-// =================================== //
-// Measurements to construct a hexagon //
-// =================================== //
+// ======================================== //
+// Math measurements to construct a hexagon //
+// ======================================== //
 public struct HexGeo {
     public HexGeo(float side, float rotDeg) {
         Side = side;

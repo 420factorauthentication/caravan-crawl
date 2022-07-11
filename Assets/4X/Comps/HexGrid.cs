@@ -17,8 +17,8 @@ public class HexGrid : MonoBehaviour {
     [HideInInspector] public static float
         scale  = 10f,
         rotDeg = 0f,
-        rOffQ  = 0f,  //Every rOffQ cols, shift world coords back 1 hex
-        qOffR  = 2f;  //Every qOffR rows, shift world coords back 1 hex
+        rOffQ  = 0f,  // Every rOffQ cols, shift world coords back 1 hex //
+        qOffR  = 2f;  // Every qOffR rows, shift world coords back 1 hex //
 
 ////////////////////
 // Unity Messages //
@@ -39,19 +39,21 @@ public class HexGrid : MonoBehaviour {
 // Methods //
 /////////////
 
+    // Creates a new GameObject with a Node component, and makes it a child //
     public static Node AddNode(int col, int row, NodeType type) {
         GameObject obj = new();
         obj.transform.SetParent(Manager.transform);
         Node node = obj.AddComponent<Node>();
         node.SetAxialPos(col, row);
         node.SetType(type);
-        //Bandaid fix for weird glitch:
-        //A node at (0,0) isnt initially detected by raycasts
-        //TODO: Breaks coroutines; look into better fix if coroutine is needed
+        // - - - - - - - - TODO: BANDAID FIX FOR WEIRD GLITCH - - - - - - - - //
+        //   A NODE at exactly (0,0,0) isn't initially detected by raycasts   //
+        //   IF DISABLED then re-enabled, it works, but it stops coroutines   //
+        //   BANDAID FIX: set y-position to 0.0001f                           //
         if ((col == 0) && (row == 0)) {
-            obj.SetActive(false);
-            obj.SetActive(true);
-        }
+            Vector3 pos = obj.transform.localPosition;
+            obj.transform.localPosition = new Vector3(pos.x, 0.0001f, pos.z);
+        }  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
         return node;
     }
 
@@ -64,7 +66,7 @@ public class HexGrid : MonoBehaviour {
         return GameObject.Find("HexGrid/Node " + col + "q " + row + "r");
     }
 
-    // Calculate hidden q and r (what they would be with offsets) //
+    // Calculates hidden q and r (what they would be with offsets) //
     public static AxHexVec2 GetOffsetAxialPos(int col, int row) {
         int q = (HexGrid.qOffR == 0) ? col :
             col - Mathf.FloorToInt(1f / HexGrid.qOffR * row);
@@ -74,7 +76,7 @@ public class HexGrid : MonoBehaviour {
         return new AxHexVec2(q, r, geo);
     }
 
-    // TODO //
+    // -- TODO -- //
     void Test() {
         AddNode(-2, -2, NodeType.Test);
         AddNode(-1, -2, NodeType.Test);

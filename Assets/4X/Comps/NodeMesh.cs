@@ -24,7 +24,7 @@ public class NodeMesh : MonoBehaviour {
 // Methods //
 /////////////
 
-    // Create a new mesh, with vertices calculated from a HexGeo //
+    // Creates a new mesh, with vertices calculated from a HexGeo //
     public void SetMesh(HexGeo hexGeo) {
         int[] triangles = new[] {
             0, 1, 6,    0, 6, 5,    0, 5, 4,

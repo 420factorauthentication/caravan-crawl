@@ -6,7 +6,9 @@ using CardEngine;
 using CursorEngine;
 
 
-//Singleton that manages cards in hand//
+// ==================================== //
+// Singleton that manages cards in hand //
+// ==================================== //
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(Image))]
 
@@ -14,18 +16,17 @@ public class Hand : MonoBehaviour,
                     IPointerEnterHandler,
                     IPointerExitHandler {
 
+    public static Hand Manager {get; private set;}
+
 ////////////////
 // Properties //
 ////////////////
 
-    //Static singleton handle
-    public static Hand Manager {get; private set;}
-
-    //Index == slot in hand
+    // Index == slot in hand //
     static List<HandCard> _cards = new();
     public static IReadOnlyList<HandCard> cards => _cards.AsReadOnly();
 
-    //Manipulate hand UI
+    // Manipulate hand UI //
     static RectTransform tr;
 
 ////////////////////
@@ -33,24 +34,24 @@ public class Hand : MonoBehaviour,
 ////////////////////
 
     void Awake() {
-        //Create singleton instance
+        //CREATE singleton instance              //
         if ((Manager != null) && (Manager != this))
             GameObject.Destroy(Manager.gameObject);
         Manager = this;
-        //Init component handles
+        //INIT component handles                 //
         tr = GetComponent<RectTransform>();
-        //Orient position to bottom left
+        //ORIENT position to bottom left         //
         tr.anchorMin = Vector2.zero;
         tr.anchorMax = Vector2.zero;
         tr.position = Vector3.zero;
         tr.pivot = Vector2.zero;
-        //Init raycast size (not display size)
-        //TODO: update on resolution change
+        //INIT collision size (not display size) //
+        //TODO: update on resolution change      //
         float x = Screen.width;
         float y = HandSize.GetHeight();
         tr.offsetMin = Vector2.zero;
         tr.offsetMax = new Vector2(x, y);
-        //Init clear image for raycasting
+        //INIT clear image for raycasting        //
         Image img = GetComponent<Image>();
         img.color = Color.clear;
 
@@ -61,7 +62,7 @@ public class Hand : MonoBehaviour,
 // Methods //
 /////////////
 
-    //Adds a card to the end of the hand
+    // Adds a card to the end of the hand //
     public static void PushCard(CardStats stats) {
         GameObject obj = new();
         obj.transform.SetParent(tr);
@@ -74,7 +75,7 @@ public class Hand : MonoBehaviour,
             cards[i].ResetPos();
     }
 
-    //Note: Moves cards ahead of slot backwards to fill the gap
+    // NOTE: Moves cards ahead of slot backwards to fill the gap //
     public static void RemoveCardAt(int slot) {
         if (cards[slot] == null) return;
         GameObject obj = cards[slot].gameObject;
@@ -87,7 +88,7 @@ public class Hand : MonoBehaviour,
         }
     }
 
-    //TODO//
+    // -- TODO --//
     void Test() {
         PushCard(new CardStats());
         PushCard(new CardStats());
@@ -109,7 +110,7 @@ public class Hand : MonoBehaviour,
 // Event Handlers //
 ////////////////////
 
-    //When cursor leaves deck area, change reticle if a card is magnetized
+    // When cursor leaves deck area, change reticle if a card is magnetized //
     public void OnPointerEnter(PointerEventData e) {
         if (!HandCard.IsAnyMagnetized) return;
         CursorManager.SetCursor(CursorTex.Default);
