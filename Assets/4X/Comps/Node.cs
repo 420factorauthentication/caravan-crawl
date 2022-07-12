@@ -92,8 +92,6 @@ public class Node : MonoBehaviour {
     void Test() {
         StartCoroutine(TestCoroutine());
     }
-
-    // -- TODO -- //
     IEnumerator TestCoroutine() {
         for (int i = 0; i < 16; i++) {
             AddEntity<Building>();

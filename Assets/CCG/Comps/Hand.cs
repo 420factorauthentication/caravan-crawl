@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -22,12 +23,11 @@ public class Hand : MonoBehaviour,
 // Properties //
 ////////////////
 
-    // Index == slot in hand //
+    static RectTransform tr;
+
+    // -- Index is slot in hand -- //
     static List<HandCard> _cards = new();
     public static IReadOnlyList<HandCard> cards => _cards.AsReadOnly();
-
-    // Manipulate hand UI //
-    static RectTransform tr;
 
 ////////////////////
 // Unity Messages //
@@ -43,8 +43,8 @@ public class Hand : MonoBehaviour,
         //ORIENT position to bottom left         //
         tr.anchorMin = Vector2.zero;
         tr.anchorMax = Vector2.zero;
-        tr.position = Vector3.zero;
-        tr.pivot = Vector2.zero;
+        tr.position  = Vector3.zero;
+        tr.pivot     = Vector2.zero;
         //INIT collision size (not display size) //
         //TODO: update on resolution change      //
         float x = Screen.width;
@@ -62,25 +62,30 @@ public class Hand : MonoBehaviour,
 // Methods //
 /////////////
 
-    // Adds a card to the end of the hand //
-    public static void PushCard(CardStats stats) {
-        GameObject obj = new();
-        obj.transform.SetParent(tr);
-        obj.name = "Card" + cards.Count;
-        HandCard card = obj.AddComponent<HandCard>();
-        card.stats = stats;
-        card.handSlot = cards.Count;
-        _cards.Add(card);
+    // Adds card(s) to the end of the hand //
+    public static void PushCards(CardStats stats, int count = 1) {
+        for (int i = 0; i < count; i++) {
+            GameObject obj = new();
+            obj.transform.SetParent(tr);
+            obj.name = "Card" + cards.Count;
+            HandCard card = obj.AddComponent<HandCard>();
+            card.stats = stats;
+            card.handSlot = cards.Count;
+            _cards.Add(card);
+        }
         for (int i = 0; i < cards.Count; i++)
             cards[i].ResetPos();
     }
 
-    // NOTE: Moves cards ahead of slot backwards to fill the gap //
-    public static void RemoveCardAt(int slot) {
-        if (cards[slot] == null) return;
-        GameObject obj = cards[slot].gameObject;
-        _cards.RemoveAt(slot);
-        Destroy(obj);
+    // -- After removing, moves cards ahead of slot backwards to fill gap -- //
+    public static void RemoveCardsAt(int slot, int count = 1) {
+        if (slot >= cards.Count) return;
+        for (int i = 0; i < count; i++) {
+            if (slot >= cards.Count) break;
+            GameObject obj = cards[slot].gameObject;
+            _cards.RemoveAt(slot);
+            Destroy(obj);
+        }
         for (int i = 0; i < cards.Count; i++) {
             cards[i].handSlot = i;
             cards[i].ResetPos();
@@ -88,36 +93,32 @@ public class Hand : MonoBehaviour,
         }
     }
 
-    // -- TODO --//
+    // -- TODO -- //
     void Test() {
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        PushCard(new CardStats());
-        for (int i = 0; i < cards.Count; i++) {
-            if (i % 2 == 0)
-                cards[i].GetComponent<Image>().color = Color.black;
-        }
+        StartCoroutine(TestCoroutine());
+    }
+    IEnumerator TestCoroutine() {
+        PushCards(new CardStats(), 5);
+        cards[0].GetComponent<Image>().color = Color.red;
+        cards[1].GetComponent<Image>().color = Color.blue;
+        cards[2].GetComponent<Image>().color = Color.green;
+        cards[3].GetComponent<Image>().color = Color.yellow;
+        cards[4].GetComponent<Image>().color = Color.magenta;
+        yield return new WaitForSeconds(1f);
+        RemoveCardsAt(3, 42069);  //should only remove yellow and magenta
     }
 
 ////////////////////
 // Event Handlers //
 ////////////////////
 
-    // When cursor leaves deck area, change reticle if a card is magnetized //
+    // When cursor leaves deck area, changes reticle if a card is magnetized //
     public void OnPointerEnter(PointerEventData e) {
         if (!HandCard.IsAnyMagnetized) return;
         CursorManager.SetCursor(CursorTex.Default);
         Cursor.visible = false;
         HandCard.CurrMagnetized.cg.alpha = 1f;
     }
-
     public void OnPointerExit(PointerEventData e) {
         if (!HandCard.IsAnyMagnetized) return;
         CursorManager.SetCursor(CursorTex.Build);
