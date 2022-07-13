@@ -38,7 +38,7 @@ public class Hand : MonoBehaviour,
         if ((Manager != null) && (Manager != this))
             GameObject.Destroy(Manager.gameObject);
         Manager = this;
-        //INIT component handles                 //
+        //COMPONENT handles for frequent tasks   //
         tr = GetComponent<RectTransform>();
         //ORIENT position to bottom left         //
         tr.anchorMin = Vector2.zero;
@@ -77,7 +77,7 @@ public class Hand : MonoBehaviour,
             cards[i].ResetPos();
     }
 
-    // -- After removing, moves cards ahead of slot backwards to fill gap -- //
+    // -- After removing, shifts higher number slots to fill gap -- //
     public static void RemoveCardsAt(int slot, int count = 1) {
         if (slot >= cards.Count) return;
         for (int i = 0; i < count; i++) {
@@ -105,7 +105,7 @@ public class Hand : MonoBehaviour,
         cards[3].GetComponent<Image>().color = Color.yellow;
         cards[4].GetComponent<Image>().color = Color.magenta;
         yield return new WaitForSeconds(1f);
-        RemoveCardsAt(3, 42069);  //should only remove yellow and magenta
+        RemoveCardsAt(3, 42069);  //SHOULD only remove yellow and magenta //
     }
 
 ////////////////////

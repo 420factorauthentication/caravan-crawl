@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using CardEngine;
 
 
-// ============================================================== //
-// Singleton that shows a zoomed preview of cards hovered in hand //
-// ============================================================== //
+// ================================================================ //
+// Singleton that shows a zoomed preview of a HandCard when hovered //
+// ================================================================ //
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(RectTransform))]
 
@@ -15,37 +15,37 @@ public class HandCardZoom : MonoBehaviour {
     Image img;
 
     void Awake() {
-        //Create singleton instance
+        //CREATE singleton instance       //
         if ((Manager != null) && (Manager != this))
             GameObject.Destroy(Manager.gameObject);
         Manager = this;
-        //Init component handles
+        //COMP handles for frequent tasks //
         tr = GetComponent<RectTransform>();
         img = GetComponent<Image>();
-        //Init size
+        //INIT transform width and height //
         float x = HandCardSize.Width / 2;
         float y = HandCardSize.Height / 2;
         tr.offsetMin = new Vector2(-x, -y);
         tr.offsetMax = new Vector2(x, y);
         tr.localScale = HandCardSize.GetZoomScale();
-        //Orient position to bottom left
+        //ORIENT position to bottom left  //
         tr.anchorMin = Vector2.zero;
         tr.anchorMax = Vector2.zero;
         tr.position = Vector3.zero;
-        //Orient movement to center
+        //ORIENT movement to center       //
         tr.pivot = new Vector2(0.5f, 0.5f);
-        //Turn off raycasting
+        //PREVENT mouse hovering this     //
         img.raycastTarget = false;
-        //Initially invisible
+        //INITIALLY hide card preview     //
         img.color = Color.clear;
     }
 
-    // Updates graphics and text //
+    // Updates graphics/text to match hovered card //
     public static void SetUI(CardStats stats) {
 
     }
 
-    // Updates card preview to match hovered card. Unhides. Moves to cursor. //
+    // Updates, unhides, moves to mouse cursor //
     // -- Called by HandCard OnPointerEnter -- //
     public static void Zoom(int handSlot, CardStats stats) {
         SetUI(stats);
@@ -53,7 +53,6 @@ public class HandCardZoom : MonoBehaviour {
         Manager.img.color = Color.white;
     }
 
-    // Hides card preview //
     // -- Called by HandCard OnPointerExit -- //
     public static void Unzoom() {
         Manager.img.color = Color.clear;

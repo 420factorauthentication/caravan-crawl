@@ -39,20 +39,20 @@ public class HandCard : CanvasDraggable,
 ////////////////////
 
     void OnDestroy() {
-        //Cleanup event handlers from static event
+        //CLEANUP event handlers from static event //
         AnyHandCardMagnet -= OnAnyHandCardMagnet;
         AnyHandCardDemagnet -= OnAnyHandCardDemagnet;
     }
 
     protected override void Awake() {
         base.Awake();
-        //Event handlers from all existing cards sub to one static event
+        //ALL existing cards sub to 1 static event //
         AnyHandCardMagnet += OnAnyHandCardMagnet;
         AnyHandCardDemagnet += OnAnyHandCardDemagnet;
-        //Init component handles
+        //COMPONENT handles for frequent tasks     //
         cg = GetComponent<CanvasGroup>();
         img = GetComponent<Image>();
-        //Init size
+        //INIT object transform width and height   //
         float x = HandCardSize.Width / 2;
         float y = HandCardSize.Height / 2;
         tr.offsetMin = new Vector2(-x, -y);
@@ -62,19 +62,19 @@ public class HandCard : CanvasDraggable,
 
     protected override void Update() {
         base.Update();
-        //Update hand position on resolution change
-        //TODO: Create resolution manager and use a res change event
+        //UPDATE hand position on resolution change //
+        //TODO: Create res manager and use an event //
         if (Screen.width != lastScreenWidth)
             ResetPos();
         lastScreenWidth = Screen.width;
-        //Determine if hovering over valid target
+        //DETERMINE if mouse hovering valid target  //
     }
 
 /////////////
 // Methods //
 /////////////
 
-    // Plays this card on a target then remove from hand //
+    // Plays this card on a target then removes from hand //
     public void PlayCard(/*Target t*/) {
 
     }
@@ -83,41 +83,40 @@ public class HandCard : CanvasDraggable,
     public static Vector3 GetHandPos(int handSlot) {
         int cards = Hand.cards.Count;
         float median = cards / 2f - 0.5f;
-        //Get horiz offset from center of screen
-        //If all cards fit, lay them edge to edge
+        //GET horizontal offset from center of screen     //
+        //IF ALL cards fit in hand, lay them edge to edge //
         float x = HandCardSize.Width * (handSlot - median);
-        //Else, overlap them
+        //OTHERWISE, overlap all cards equally            //
         float fitCards = HandSize.GetWidth() / HandCardSize.Width;
         if (fitCards < cards)
             x = x * (fitCards - 1f) / (cards - 1f);
-        //Translate horiz offset to left offset
+        //TRANSLATE horizontal offset to left offset      //
         x = x + (Screen.width / 2f);
-        //Return position
         float y = HandCardSize.Height / 2f;
         return new Vector3(x, y, 0);
     }
 
-    // Moves this card back to its hand slot and resets other settings //
+    // Moves this card back to it's hand slot and resets other settings //
     public void ResetPos() {
         tr.localPosition = GetHandPos(handSlot);
-        cg.alpha = 1f;  // Unhide, incase it was hidden for targeting reticle //
+        cg.alpha = 1f;  //UNHIDE incase it was hidden for targeting reticle
     }
 
-    // Attaches card to cursor //
+    // Attaches card to cursor (position follows the cursor on Update) //
     // -- Called by CanvasDraggable while dragging or when clicked -- //
     public override void Magnetize() {
         base.Magnetize();
-        tr.SetAsLastSibling(); // Bring to front //
+        tr.SetAsLastSibling(); //BRING to front
         Cursor.visible = false;
         CurrMagnetized = this;
         AnyHandCardMagnet?.Invoke();
     }
 
     // Detaches card from cursor and plays card if hovering valid target //
-    // -- Called by CanvasDraggable on drag end or on second click -- //
+    // -- Called by CanvasDraggable when drag ends or on second click -- //
     public override void Demagnetize() {
         base.Demagnetize();
-        tr.SetSiblingIndex(handSlot); //Bring to back
+        tr.SetSiblingIndex(handSlot); //BRING to back
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         Cursor.visible = true;
         CurrMagnetized = null;

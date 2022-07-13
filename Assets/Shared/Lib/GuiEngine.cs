@@ -13,12 +13,12 @@ public class CursorCanvasMagnet : MonoBehaviour {
     public bool isMagnetized {get; private set;} = false;
 
     protected virtual void Awake() {
-        //INIT component handles         //
+        //COMP handles for frequent tasks //
         tr = GetComponent<RectTransform>();
-        //ORIENT position to bottom left //
+        //ORIENT position to bottom left  //
         tr.anchorMin = Vector2.zero;
         tr.anchorMax = Vector2.zero;
-        //ORIENT movement to center      //
+        //ORIENT movement to center       //
         tr.pivot = new Vector2(0.5f, 0.5f);
     }
 
@@ -35,8 +35,8 @@ public class CursorCanvasMagnet : MonoBehaviour {
         isMagnetized = false;
     }
 
-    // Orients parent transform to bottom left //
-    // Do this somewhere on parent's RectTransform once //
+    // Orients local position of this object to bottom left //
+    // -- Do this somewhere on parent RectTransform once -- //
     public static void InitParentAnchor(RectTransform parentTr) {
         parentTr.anchorMin = Vector2.zero;
         parentTr.anchorMax = Vector2.zero;
@@ -76,12 +76,11 @@ public class CanvasDraggable : CursorCanvasMagnet,
 
     protected override void Update() {
         base.Update();
+        //GET 2nd mouse click to demagnetize (incase raycast is disabled)  //
         if (!isMagnetized) return;
-        //GET 2nd mouse click to demagnetize (incase raycast is disabled) //
         if (Input.GetMouseButtonUp(0)) {
-            //FIRST mouse click in OnPointerClick bleeds through          //
+            //PREVENT first mouse click in OnPointerClick bleeding through //
             if (!acceptNextDemagClick) acceptNextDemagClick = true;
-            //DEMAGNETIZE on 2nd mouse click                              //
             else Demagnetize();
         }
     }
@@ -106,7 +105,6 @@ public class CanvasDraggable : CursorCanvasMagnet,
     }
 
     public void OnDrag(PointerEventData e) {
-
     }
 
     public void OnBeginDrag(PointerEventData e) {
