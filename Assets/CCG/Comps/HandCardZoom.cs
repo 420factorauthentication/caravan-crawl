@@ -3,7 +3,9 @@ using UnityEngine.UI;
 using CardEngine;
 
 
-//Singleton that shows a zoomed preview of cards hovered in hand//
+// ============================================================== //
+// Singleton that shows a zoomed preview of cards hovered in hand //
+// ============================================================== //
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(RectTransform))]
 
@@ -38,18 +40,21 @@ public class HandCardZoom : MonoBehaviour {
         img.color = Color.clear;
     }
 
-    //Update graphics and text
+    // Updates graphics and text //
     public static void SetUI(CardStats stats) {
-        
+
     }
 
-    //When a HandCard is hovered, move, update, and unhide this zoomed image
+    // Updates card preview to match hovered card. Unhides. Moves to cursor. //
+    // -- Called by HandCard OnPointerEnter -- //
     public static void Zoom(int handSlot, CardStats stats) {
         SetUI(stats);
         Manager.tr.localPosition = HandCard.GetHandPos(handSlot);
         Manager.img.color = Color.white;
     }
 
+    // Hides card preview //
+    // -- Called by HandCard OnPointerExit -- //
     public static void Unzoom() {
         Manager.img.color = Color.clear;
     }

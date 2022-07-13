@@ -24,11 +24,9 @@ public abstract class HoverParent : MonoBehaviour {
 
     // The things to do to this HoverParent only (not children) //
     protected abstract void OnHover();
-
-    // The things to do to this HoverParent only (not children) //
     protected abstract void OnUnhover();
 
-    // -- Called by CursorTargeter when any new object is hovered -- //
+    // -- Called once by CursorTargeter, when any new object is hovered -- //
     public static void OnNewObjHover() {
         HoverParent oldParent =
             CursorTargeter.OldObjHit.transform?.GetComponent<HoverParent>();

@@ -28,7 +28,7 @@ public class CursorTargeter : MonoBehaviour {
         RaycastHit hit;
         Physics.Raycast(ray, out hit);
         if (hit.collider == NewObjHit.collider) return;
-        //Note: collider can be null, which means mouse is hovering no obj
+        // Note: collider can be null, which means mouse is hovering no obj //
         OldObjHit = NewObjHit;
         NewObjHit = hit;
         NewObjHover?.Invoke();

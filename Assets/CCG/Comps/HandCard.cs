@@ -6,9 +6,9 @@ using GuiEngine;
 using EventEngine;
 
 
-// ============== //
-// A card in hand //
-// ============== //
+// ============================================ //
+// A card object that exists in a player's hand //
+// ============================================ //
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(CanvasGroup))]
 [RequireComponent(typeof(Image))]
@@ -21,18 +21,17 @@ public class HandCard : CanvasDraggable,
 // Properties //
 ////////////////
 
-    // Params to add new card to hand //
-    public int handSlot = -1;  // -1 means unset by hand //
-    public CardStats stats;
-
-    // Manipulate hand UI //
     public CanvasGroup cg {get; private set;}
     public Image img {get; private set;}
 
-    // Play card if target valid //
+    public int handSlot = -1;  // -1 means unset by hand //
+    public CardStats stats;
+
+    // Is the pointer currently hovering a valid target? //
+    // Checked when the player attempts to play the card //
     bool isTargetValid = false;
 
-    // Update hand position on resolution change //
+    // Used to update hand position on resolution change //
     int lastScreenWidth = Screen.width;
 
 ////////////////////
@@ -75,12 +74,12 @@ public class HandCard : CanvasDraggable,
 // Methods //
 /////////////
 
-    // Play this card on a target then remove from hand //
+    // Plays this card on a target then remove from hand //
     public void PlayCard(/*Target t*/) {
 
     }
 
-    // Get card position based on hand slot //
+    // Gets world coords for a hand slot //
     public static Vector3 GetHandPos(int handSlot) {
         int cards = Hand.cards.Count;
         float median = cards / 2f - 0.5f;
@@ -98,22 +97,24 @@ public class HandCard : CanvasDraggable,
         return new Vector3(x, y, 0);
     }
 
-    // Set card position based on hand slot //
+    // Moves this card back to its hand slot and resets other settings //
     public void ResetPos() {
         tr.localPosition = GetHandPos(handSlot);
-        cg.alpha = 1f;  //Unhide, incase it was hidden for targeting reticle
+        cg.alpha = 1f;  // Unhide, incase it was hidden for targeting reticle //
     }
 
-    // Attach card to cursor while dragging or when clicked //
+    // Attaches card to cursor //
+    // -- Called by CanvasDraggable while dragging or when clicked -- //
     public override void Magnetize() {
         base.Magnetize();
-        tr.SetAsLastSibling(); //Bring to front
+        tr.SetAsLastSibling(); // Bring to front //
         Cursor.visible = false;
         CurrMagnetized = this;
         AnyHandCardMagnet?.Invoke();
     }
 
-    // Detach card from cursor and play card if valid target //
+    // Detaches card from cursor and plays card if hovering valid target //
+    // -- Called by CanvasDraggable on drag end or on second click -- //
     public override void Demagnetize() {
         base.Demagnetize();
         tr.SetSiblingIndex(handSlot); //Bring to back
@@ -129,7 +130,7 @@ public class HandCard : CanvasDraggable,
 // Event Senders //
 ///////////////////
 
-    // When any card is magnetized, turn off raycast on all cards //
+    // When any card is magnetized, turns off raycast on all cards //
     public static bool IsAnyMagnetized = false;
     public static HandCard CurrMagnetized;
 

@@ -7,9 +7,9 @@ using CardEngine;
 using CursorEngine;
 
 
-// ==================================== //
-// Singleton that manages cards in hand //
-// ==================================== //
+// =============================================================== //
+// Singleton that manages existing card objects in a player's hand //
+// =============================================================== //
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(Image))]
 
@@ -112,7 +112,7 @@ public class Hand : MonoBehaviour,
 // Event Handlers //
 ////////////////////
 
-    // When cursor leaves deck area, changes reticle if a card is magnetized //
+    // When cursor leaves hand area, changes reticle if a card is magnetized //
     public void OnPointerEnter(PointerEventData e) {
         if (!HandCard.IsAnyMagnetized) return;
         CursorManager.SetCursor(CursorTex.Default);
