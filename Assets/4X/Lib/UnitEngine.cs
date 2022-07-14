@@ -13,9 +13,9 @@ namespace UnitEngine /*;*/ {
 
 public abstract class Entity : MonoBehaviour, IHoverChild {
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     public int NodeCol {get; private set;}
     public int NodeRow {get; private set;}

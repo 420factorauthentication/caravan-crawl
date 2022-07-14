@@ -11,9 +11,9 @@ public class NodeType {
         Mat.SetTexture("_MainTex", mainTex);
     }
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     public Material Mat {get; private set;}
 

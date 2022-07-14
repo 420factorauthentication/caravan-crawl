@@ -57,9 +57,9 @@ public class CanvasDraggable : CursorCanvasMagnet,
                                IBeginDragHandler,
                                IEndDragHandler {
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     // -- Used to check for 2nd click, to toggle off magnetization       - //
     //  - Clicking is checked in both Update() and OnPointerClick()      - //

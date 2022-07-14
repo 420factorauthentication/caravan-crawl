@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using CardEngine;
 using GuiEngine;
-using EventEngine;
+using DelegateEngine;
 
 
 // ============================================ //
@@ -17,9 +17,9 @@ public class HandCard : CanvasDraggable,
                         IPointerEnterHandler,
                         IPointerExitHandler {
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     public CanvasGroup cg {get; private set;}
     public Image img {get; private set;}
@@ -30,6 +30,7 @@ public class HandCard : CanvasDraggable,
     // Is the pointer currently hovering a valid target? //
     // Checked when the player attempts to play the card //
     bool isTargetValid = false;
+    Condition targetConds;
 
     // Used to update hand position on resolution change //
     int lastScreenWidth = Screen.width;
@@ -67,7 +68,6 @@ public class HandCard : CanvasDraggable,
         if (Screen.width != lastScreenWidth)
             ResetPos();
         lastScreenWidth = Screen.width;
-        //DETERMINE if mouse hovering valid target  //
     }
 
 /////////////
@@ -124,7 +124,6 @@ public class HandCard : CanvasDraggable,
         if (isTargetValid) PlayCard(); else ResetPos();
     }
 
-
 ///////////////////
 // Event Senders //
 ///////////////////
@@ -148,6 +147,11 @@ public class HandCard : CanvasDraggable,
 
     void OnAnyHandCardDemagnet() {
         img.raycastTarget = true;
+    }
+
+    public static void OnNewObjHover() {
+        //DETERMINE if mouse hovering valid target //
+
     }
 
 //////////////////////////

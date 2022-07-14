@@ -16,9 +16,9 @@ using UnitEngine;
 
 public class Node : MonoBehaviour {
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     public int Col {get; private set;}
     public int Row {get; private set;}

@@ -19,9 +19,9 @@ public class Hand : MonoBehaviour,
 
     public static Hand Manager {get; private set;}
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     static RectTransform tr;
 

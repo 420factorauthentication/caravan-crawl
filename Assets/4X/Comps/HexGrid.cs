@@ -9,9 +9,9 @@ using HexEngine;
 public class HexGrid : MonoBehaviour {
     public static HexGrid Manager {get; private set;}
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     // -- TODO: update existing nodes on change -- //
     [HideInInspector] public static float

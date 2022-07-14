@@ -12,9 +12,9 @@ public struct HexGeo {
         RotDeg = rotDeg;
     }
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     // side length // circumcircle radius //
     public float Side {get; private set;}
@@ -85,9 +85,9 @@ public struct AxHexVec2 {
         HexGeo = hexGeo;
     }
 
-////////////////
-// Properties //
-////////////////
+///////////////////////////
+// Properties and Fields //
+///////////////////////////
 
     public float Q;        //Column
     public float R;        //Row
