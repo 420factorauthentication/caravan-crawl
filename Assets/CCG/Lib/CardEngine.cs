@@ -24,17 +24,17 @@ public static class HandCardSize {
     public const float ZoomOffsetX = 0f;
     public const float ZoomOffsetY = 40f;
 
-    public static Vector3 GetUnzoomScale() {
-        return new Vector3(Scale, Scale, 1f);
-    }
+    public static Vector2 SizeVec2 {
+        get { return new Vector2(Width, Height); } }
 
-    public static Vector3 GetZoomScale() {
-        return new Vector3(ZoomScale, ZoomScale, 1f);
-    }
+    public static Vector3 ScaleVec3 {
+        get { return new Vector3(Scale, Scale, 1f); } }
 
-    public static Vector3 GetZoomOffset() {
-        return new Vector3(ZoomOffsetX, ZoomOffsetY, 0);
-    }
+    public static Vector3 ZoomScaleVec3 {
+        get { return new Vector3(ZoomScale, ZoomScale, 1f); } }
+
+    public static Vector3 ZoomOffsetVec3 {
+        get { return new Vector3(ZoomOffsetX, ZoomOffsetY, 0); } }
 }
 
 
@@ -47,13 +47,11 @@ public static class HandSize {
     public const float ScreenWidthFactor = 0.5f;
     public const float ScreenHeightFactor = 0.225f;
 
-    public static float GetWidth() {
-        return Screen.width * ScreenWidthFactor;
-    }
+    public static float Width {
+        get { return Screen.width * ScreenWidthFactor; } }
 
-    public static float GetHeight() {
-        return Screen.height * ScreenHeightFactor;
-    }
+    public static float Height {
+        get { return Screen.height * ScreenHeightFactor; } }
 }
 
 

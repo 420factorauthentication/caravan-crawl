@@ -48,7 +48,7 @@ public class Hand : MonoBehaviour,
         //INIT collision size (not display size) //
         //TODO: update on resolution change      //
         float x = Screen.width;
-        float y = HandSize.GetHeight();
+        float y = HandSize.Height;
         tr.offsetMin = Vector2.zero;
         tr.offsetMax = new Vector2(x, y);
         //INIT clear image for raycasting        //

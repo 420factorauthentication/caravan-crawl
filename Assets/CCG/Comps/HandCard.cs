@@ -21,11 +21,12 @@ public class HandCard : CanvasDraggable,
 // Properties and Fields //
 ///////////////////////////
 
-    public CanvasGroup cg {get; private set;}
-    public Image img {get; private set;}
-
-    public int handSlot = -1;  // -1 means unset by hand //
+    Image img;
     public CardStats stats;
+    public int handSlot = -1;  // -1 means unset by hand //
+
+    // -- Used by Hand; set alpha when cursor changes -- //
+    public CanvasGroup cg {get; private set;}
 
     // Is the pointer currently hovering a valid target? //
     // Checked when the player attempts to play the card //
@@ -58,7 +59,7 @@ public class HandCard : CanvasDraggable,
         float y = HandCardSize.Height / 2;
         tr.offsetMin = new Vector2(-x, -y);
         tr.offsetMax = new Vector2(x, y);
-        tr.localScale = HandCardSize.GetUnzoomScale();
+        tr.localScale = HandCardSize.ScaleVec3;
     }
 
     protected override void Update() {
@@ -87,7 +88,7 @@ public class HandCard : CanvasDraggable,
         //IF ALL cards fit in hand, lay them edge to edge //
         float x = HandCardSize.Width * (handSlot - median);
         //OTHERWISE, overlap all cards equally            //
-        float fitCards = HandSize.GetWidth() / HandCardSize.Width;
+        float fitCards = HandSize.Width / HandCardSize.Width;
         if (fitCards < cards)
             x = x * (fitCards - 1f) / (cards - 1f);
         //TRANSLATE horizontal offset to left offset      //

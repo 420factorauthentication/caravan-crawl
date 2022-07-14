@@ -11,8 +11,8 @@ using CardEngine;
 
 public class HandCardZoom : MonoBehaviour {
     public static HandCardZoom Manager {get; private set;}
-    RectTransform tr;
-    Image img;
+    static RectTransform tr;
+    static Image img;
 
     void Awake() {
         //CREATE singleton instance       //
@@ -27,7 +27,7 @@ public class HandCardZoom : MonoBehaviour {
         float y = HandCardSize.Height / 2;
         tr.offsetMin = new Vector2(-x, -y);
         tr.offsetMax = new Vector2(x, y);
-        tr.localScale = HandCardSize.GetZoomScale();
+        tr.localScale = HandCardSize.ZoomScaleVec3;
         //ORIENT position to bottom left  //
         tr.anchorMin = Vector2.zero;
         tr.anchorMax = Vector2.zero;
@@ -49,12 +49,12 @@ public class HandCardZoom : MonoBehaviour {
     // -- Called by HandCard OnPointerEnter -- //
     public static void Zoom(int handSlot, CardStats stats) {
         SetUI(stats);
-        Manager.tr.localPosition = HandCard.GetHandPos(handSlot);
-        Manager.img.color = Color.white;
+        tr.localPosition = HandCard.GetHandPos(handSlot);
+        img.color = Color.white;
     }
 
     // -- Called by HandCard OnPointerExit -- //
     public static void Unzoom() {
-        Manager.img.color = Color.clear;
+        img.color = Color.clear;
     }
 }
