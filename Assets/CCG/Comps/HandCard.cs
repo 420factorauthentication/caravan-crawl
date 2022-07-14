@@ -22,6 +22,8 @@ public class HandCard : CanvasDraggable,
 ///////////////////////////
 
     Image img;
+
+    // -- TODO: Property set functions -- //
     public CardStats stats;
     public int handSlot = -1;  // -1 means unset by hand //
 
@@ -48,12 +50,12 @@ public class HandCard : CanvasDraggable,
 
     protected override void Awake() {
         base.Awake();
-        //ALL existing cards sub to 1 static event //
-        AnyHandCardMagnet += OnAnyHandCardMagnet;
-        AnyHandCardDemagnet += OnAnyHandCardDemagnet;
         //COMPONENT handles for frequent tasks     //
         cg = GetComponent<CanvasGroup>();
         img = GetComponent<Image>();
+        //ALL existing cards sub to 1 static event //
+        AnyHandCardMagnet += OnAnyHandCardMagnet;
+        AnyHandCardDemagnet += OnAnyHandCardDemagnet;
         //INIT object transform width and height   //
         float x = HandCardSize.Width / 2;
         float y = HandCardSize.Height / 2;
@@ -110,7 +112,7 @@ public class HandCard : CanvasDraggable,
         tr.SetAsLastSibling(); //BRING to front
         Cursor.visible = false;
         CurrMagnetized = this;
-        AnyHandCardMagnet?.Invoke();
+        _AnyHandCardMagnet?.Invoke();
     }
 
     // Detaches card from cursor and plays card if hovering valid target //
@@ -121,22 +123,41 @@ public class HandCard : CanvasDraggable,
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         Cursor.visible = true;
         CurrMagnetized = null;
-        AnyHandCardDemagnet?.Invoke();
+        _AnyHandCardDemagnet?.Invoke();
         if (isTargetValid) PlayCard(); else ResetPos();
     }
 
-///////////////////
-// Event Senders //
-///////////////////
+////////////
+// Events //
+////////////
 
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
     // When any card is magnetized, turns off raycast on all cards //
-    public static bool IsAnyMagnetized = false;
-    public static HandCard CurrMagnetized;
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+    public static bool IsAnyMagnetized {get; private set;} = false;
+    public static HandCard CurrMagnetized {get; private set;}
 
-    public static event GenericEventHandler AnyHandCardMagnet
+    static GenericEventHandler _AnyHandCardMagnet
         = delegate { IsAnyMagnetized = true; };
-    public static event GenericEventHandler AnyHandCardDemagnet
+    static GenericEventHandler _AnyHandCardDemagnet
         = delegate { IsAnyMagnetized = false; };
+
+    public static event GenericEventHandler AnyHandCardMagnet {
+        add {
+            _AnyHandCardMagnet += value;
+            if (IsAnyMagnetized) value();   }
+        remove {
+            _AnyHandCardMagnet -= value;    }
+    }
+
+    public static event GenericEventHandler AnyHandCardDemagnet {
+        add {
+            _AnyHandCardDemagnet += value;
+            if (!IsAnyMagnetized) value();  }
+        remove {
+            _AnyHandCardDemagnet -= value;  }
+    }
+
 
 ////////////////////
 // Event Handlers //

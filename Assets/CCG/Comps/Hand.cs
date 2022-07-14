@@ -78,6 +78,7 @@ public class Hand : MonoBehaviour,
     }
 
     // -- After removing, shifts higher number slots to fill gap -- //
+    // -- TODO: Handle removing a card that's currently dragged -- //
     public static void RemoveCardsAt(int slot, int count = 1) {
         if (slot >= cards.Count) return;
         for (int i = 0; i < count; i++) {
