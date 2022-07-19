@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using CardEngine;
+using CardEffectEngine;
+using ConditionEngine;
 using GuiEngine;
 using DelegateEngine;
 
@@ -30,10 +33,9 @@ public class HandCard : CanvasDraggable,
     // -- Used by Hand; set alpha when cursor changes -- //
     public CanvasGroup cg {get; private set;}
 
-    // Is the pointer currently hovering a valid target? //
     // Checked when the player attempts to play the card //
-    bool isTargetValid = false;
-    Condition targetConds;
+    public Condition conditions;
+    public List<ICardEffect> effects;
 
     // Used to update hand position on resolution change //
     int lastScreenWidth = Screen.width;
@@ -77,11 +79,6 @@ public class HandCard : CanvasDraggable,
 // Methods //
 /////////////
 
-    // Plays this card on a target then removes from hand //
-    public void PlayCard(/*Target t*/) {
-
-    }
-
     // Gets world coords for a hand slot //
     public static Vector3 GetHandPos(int handSlot) {
         int cards = Hand.cards.Count;
@@ -124,7 +121,15 @@ public class HandCard : CanvasDraggable,
         Cursor.visible = true;
         CurrMagnetized = null;
         _AnyHandCardDemagnet?.Invoke();
-        if (isTargetValid) PlayCard(); else ResetPos();
+        if (conditions.Evaluate()) PlayCard(); else ResetPos();
+    }
+
+    // Plays this card on a target then removes from hand //
+    void PlayCard() {
+        foreach(ICardEffect cardEffect in effects) {
+            cardEffect.Activate();
+        }
+        //TODO: remove card//
     }
 
 ////////////

@@ -66,6 +66,11 @@ public class HexGrid : MonoBehaviour {
         return GameObject.Find("HexGrid/Node " + col + "q " + row + "r");
     }
 
+    public static Node GetNodeAt(int col, int row) {
+        GameObject nodeObj = GetNodeObjAt(col, row);
+        return nodeObj.GetComponent<Node>();
+    }
+
     // Calculates hidden q and r (what they would be with offsets) //
     public static AxHexVec2 GetOffsetAxialPos(int col, int row) {
         int q = (HexGrid.qOffR == 0) ? col :

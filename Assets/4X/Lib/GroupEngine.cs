@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using HexEngine;
 namespace GroupEngine /*;*/ {
 
 
@@ -31,25 +31,42 @@ public abstract class GroupBase : MonoBehaviour {
         return objs;
     }
 
+
     public void RemoveChild(int index) {
         if ((index >= 0) && (index < transform.childCount)) {
             Destroy(transform.GetChild(index));
             ArrangeChildren();
         }
     }
-
     public void RemoveChild(GameObject obj) {
         if (obj.transform.parent == transform) {
             Destroy(obj);
             ArrangeChildren();
         }
     }
-
     public void RemoveChild(Component comp) {
         if (comp.transform.parent == transform) {
             Destroy(comp.gameObject);
             ArrangeChildren();
         }
+    }// -- Depth first search -- //
+    public void RemoveChild(Type componentType) {
+
+    }
+
+
+    // -- TODO: IMPLEMENT THESE -- //
+    public void RemoveChildren(int index, int count) {
+
+    }
+    public void RemoveChildren(GameObject[] objs) {
+
+    }
+    public void RemoveChildren(Component[] comps) {
+
+    }// -- Depth first search -- //
+    public void RemoveChildren(Type componentType, int count) {
+
     }
 }
 

@@ -25,9 +25,9 @@ public abstract class HoverParent : MonoBehaviour {
     // -- Called once by CursorTargeter, when any new object is hovered -- //
     public static void OnNewObjHover() {
         HoverParent oldParent =
-            CursorTargeter.OldObjHit.transform?.GetComponent<HoverParent>();
+            CursorTargeter.OldRayHit.transform?.GetComponent<HoverParent>();
         HoverParent newParent =
-            CursorTargeter.NewObjHit.transform?.GetComponent<HoverParent>();
+            CursorTargeter.NewRayHit.transform?.GetComponent<HoverParent>();
 
         if (oldParent != null) {
             oldParent.OnUnhover();
