@@ -77,8 +77,8 @@ public class Hand : MonoBehaviour,
             cards[i].ResetPos();
     }
 
-    // -- After removing, shifts higher number slots to fill gap -- //
-    // -- TODO: Handle removing a card that's currently dragged -- //
+    // -- After removing, slot indices are re-sorted like a List  -- //
+    // -- TODO: Handle removing a card that is currently dragging -- //
     public static void RemoveCardsAt(int slot, int count = 1) {
         if (slot >= cards.Count) return;
         for (int i = 0; i < count; i++) {
@@ -96,9 +96,11 @@ public class Hand : MonoBehaviour,
 
     // -- TODO -- //
     void Test() {
-        StartCoroutine(TestCoroutine());
+        // StartCoroutine(TestAddCards());
+        StartCoroutine(TestCardConds());
+        StartCoroutine(TestCardEffects());
     }
-    IEnumerator TestCoroutine() {
+    IEnumerator TestAddCards() {
         PushCards(new CardStats(), 5);
         cards[0].GetComponent<Image>().color = Color.red;
         cards[1].GetComponent<Image>().color = Color.blue;
@@ -107,6 +109,13 @@ public class Hand : MonoBehaviour,
         cards[4].GetComponent<Image>().color = Color.magenta;
         yield return new WaitForSeconds(1f);
         RemoveCardsAt(3, 42069);  //SHOULD only remove yellow and magenta //
+    }
+    IEnumerator TestCardConds() {
+        PushCards(new CardStats(), 5);
+        //cards[0]
+    }
+    IEnumerator TestCardEffects() {
+
     }
 
 ////////////////////

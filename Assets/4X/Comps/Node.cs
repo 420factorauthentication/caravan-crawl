@@ -31,7 +31,7 @@ public class Node : MonoBehaviour {
 
     void Awake() {
         groupHex = GetComponent<GroupHex>();
-        Test(); //TODO//
+        //Test(); //TODO//
     }
 
 /////////////
@@ -39,6 +39,7 @@ public class Node : MonoBehaviour {
 /////////////
 
     // Adds a unit/building to this node hex //
+    // -- Adds at end of list of children -- //
     public GameObject AddEntity(Type type) {
         GameObject obj = groupHex.AddChild();
         obj.AddComponent(type);
@@ -66,7 +67,8 @@ public class Node : MonoBehaviour {
     }
 
 
-    // Removes a unit/building from this Node. Destroys its GameObject. //
+    // Removes a unit/building from this Node and destroys its GameObject //
+    // -- After removing, children indices are re-sorted like a List  -- //
     public void RemoveEntity(int index) {
         groupHex.RemoveChild(index);
     }
@@ -75,9 +77,12 @@ public class Node : MonoBehaviour {
     }
     public void RemoveEntity(Component comp) {
         groupHex.RemoveChild(comp);
-    }// -- Depth first search -- //
+    }  //  --  Depth first search  --  //
     public void RemoveEntity(Type componentType) {
         groupHex.RemoveChild(componentType);
+    }
+    public void RemoveEntity<T>() {
+        groupHex.RemoveChild<T>();
     }
 
 
@@ -90,9 +95,12 @@ public class Node : MonoBehaviour {
     }
     public void RemoveEntities(Component[] comps) {
         groupHex.RemoveChildren(comps);
-    }// -- Depth first search -- //
+    }  //  --  Depth first search  --  //
     public void RemoveEntities(Type componentType, int count) {
         groupHex.RemoveChildren(componentType, count);
+    }
+    public void RemoveEntities<T>(int count) {
+        groupHex.RemoveChildren<T>(count);
     }
 
 
@@ -113,11 +121,11 @@ public class Node : MonoBehaviour {
 
     // -- This func takes hidden q and r from HexGrid.GetOffsetAxialPos() -- //
     void SetAbsWorldCoords(float absQ, float absR) {
-        // set mesh //
+        // // // // // // set mesh // // // // // //
         NodeMesh nodeMesh = GetComponent<NodeMesh>();
         HexGeo geo = new(HexGrid.scale, HexGrid.rotDeg);
         nodeMesh.SetMesh(geo);
-        // set world pos //
+        // // // // set world pos // // // //
         AxHexVec2 coords = new(absQ, absR, geo);
         transform.localPosition = coords.ToWorld();
     }
@@ -128,9 +136,19 @@ public class Node : MonoBehaviour {
         StartCoroutine(TestCoroutine());
     }
     IEnumerator TestCoroutine() {
-        for (int i = 0; i < 16; i++) {
-            AddEntity<Building>();
-            yield return new WaitForSeconds(1f);
-        }
+        AddEntity(typeof(Building));
+        yield return new WaitForSeconds(1f);
+
+        AddEntity<Building>();
+        yield return new WaitForSeconds(1f);
+
+        AddEntities(typeof(Building), 7);
+        yield return new WaitForSeconds(1f);
+
+        AddEntities<Building>(7);
+        yield return new WaitForSeconds(1f);
+
+        RemoveEntity(1);
+        yield return new WaitForSeconds(1f);
     }
 }

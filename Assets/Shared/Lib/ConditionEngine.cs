@@ -13,6 +13,8 @@ public struct Condition {
             if (func() == false) return false;
         return true;
     }
+
+    //TODO: operator overloading//
 }
 
 
